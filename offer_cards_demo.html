@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMPOI - Offers & Search</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f9f4 0%, #e8f5e9 100%);
+            padding: 40px 20px;
+            font-family: 'Inter', Arial, sans-serif;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Search Bar */
+        .search-section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(76, 175, 80, 0.1);
+            margin-bottom: 32px;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 16px;
+            border: 2px solid #c8e6c9;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #66bb6a;
+            box-shadow: 0 0 0 3px rgba(102, 187, 106, 0.1);
+        }
+
+        .search-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #66bb6a, #4caf50);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .premium-btn {
+            padding: 12px 24px;
+            background: white;
+            color: #4caf50;
+            border: 2px solid #4caf50;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .premium-btn:hover {
+            background: #4caf50;
+            color: white;
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2e7d32;
+        }
+
+        .view-all {
+            color: #4caf50;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Offer Cards Grid */
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .offer-card {
+            height: 190px;
+            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+            border-radius: 16px;
+            padding: 18px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 3px 12px rgba(76, 175, 80, 0.15);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(76, 175, 80, 0.25);
+        }
+
+        .offer-card.featured {
+            background: linear-gradient(135deg, #c8e6c9, #dcedc8);
+        }
+
+        .offer-card.premium {
+            background: linear-gradient(135deg, #a5d6a7, #c5e1a5);
+            border: 2px solid #66bb6a;
+        }
+
+        .offer-tag {
+            background: #2e7d32;
+            color: #ffffff;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 20px;
+            width: fit-content;
+            margin-bottom: 12px;
+        }
+
+        .offer-tag.new {
+            background: #ff6f00;
+        }
+
+        .offer-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #1b5e20;
+            line-height: 1.3;
+            max-width: 65%;
+        }
+
+        .offer-validity {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #558b2f;
+            font-weight: 500;
+        }
+
+        .coupon-pill {
+            margin-top: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            background: white;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            border: 2px dashed #66bb6a;
+            width: fit-content;
+            color: #2e7d32;
+        }
+
+        .coupon-icon {
+            width: 18px;
+            height: 18px;
+            background: #4caf50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .offer-image {
+            position: absolute;
+            right: -10px;
+            bottom: -5px;
+            width: 140px;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        /* What's New Section */
+        .whats-new-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .news-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.1);
+            border-left: 4px solid #66bb6a;
+            transition: all 0.3s;
+        }
+
+        .news-card:hover {
+            box-shadow: 0 4px 16px rgba(76, 175, 80, 0.2);
+            transform: translateX(4px);
+        }
+
+        .news-badge {
+            display: inline-block;
+            background: #fff3e0;
+            color: #ff6f00;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .news-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1b5e20;
+            margin-bottom: 8px;
+        }
+
+        .news-desc {
+            font-size: 13px;
+            color: #558b2f;
+            line-height: 1.5;
+        }
+
+        .news-date {
+            font-size: 12px;
+            color: #81c784;
+            margin-top: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .offers-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Product RCN W320" value="Product RCN W320">
+                <input type="text" class="search-input" placeholder="Origin Benin" value="Origin Benin">
+                <input type="text" class="search-input" placeholder="Date 13 Oct, 2025" value="Date 13 Oct, 2025">
+                <input type="text" class="search-input" placeholder="Quantity 150 MT" value="Quantity 150 MT">
+                <button class="search-btn">Search suppliers</button>
+                <button class="premium-btn">Premium suppliers</button>
+            </div>
+        </div>
+
+        <!-- Offers Section -->
+        <div class="section-header">
+            <h2 class="section-title">🎁 Special Offers</h2>
+            <a href="#" class="view-all">View All →</a>
+        </div>
+
+        <div class="offers-grid">
+            <!-- Offer Card 1 - Premium -->
+            <div class="offer-card premium">
+                <div class="offer-tag">Premium</div>
+                <div class="offer-title">
+                    Get FLAT 10% OFF on First Bulk Order
+                </div>
+                <div class="offer-validity">Valid till 31 Dec 2025</div>
+                <div class="coupon-pill">
+                    <span class="coupon-icon">🏷️</span>
+                    OMPOI500
+                </div>
+                <div class="offer-image" style="font-size: 80px;">🌾</div>
+            </div>
+
+            <!-- Offer Card 2 - Agro -->
+            <div class="offer-card">
+                <div class="offer-tag">Agro</div>
+                <div class="offer-title">
+                    Save up to ₹500 on Agro Trade
+                </div>
+                <div class="offer-validity">Valid till 31 Dec</div>
+                <div class="coupon-pill">
+                    <span class="coupon-icon">💰</span>
+                    AGRO500
+                </div>
+                <div class="offer-image" style="font-size: 80px;">🌱</div>
+            </div>
+
+            <!-- Offer Card 3 - Bulk Deal -->
+            <div class="offer-card featured">
+                <div class="offer-tag">Bulk Deal</div>
+                <div class="offer-title">
+                    Special Rates for Bulk Buyers
+                </div>
+                <div class="offer-validity">Limited Time Offer</div>
+                <div class="coupon-pill">
+                    <span class="coupon-icon">📦</span>
+                    BULK10
+                </div>
+                <div class="offer-image" style="font-size: 80px;">📊</div>
+            </div>
+
+            <!-- Offer Card 4 - FlexiPayment -->
+            <div class="offer-card">
+                <div class="offer-tag new">New</div>
+                <div class="offer-title">
+                    FlexiPayment - Multi-currency Support
+                </div>
+                <div class="offer-validity">Available Now</div>
+                <div class="coupon-pill">
+                    <span class="coupon-icon">💳</span>
+                    FLEXI2025
+                </div>
+                <div class="offer-image" style="font-size: 80px;">💵</div>
+            </div>
+        </div>
+
+        <!-- What's New Section -->
+        <div class="section-header">
+            <h2 class="section-title">✨ What's New</h2>
+            <a href="#" class="view-all">View All →</a>
+        </div>
+
+        <div class="whats-new-grid">
+            <div class="news-card">
+                <span class="news-badge">NEW FEATURE</span>
+                <div class="news-title">AI-Powered Supplier Matching</div>
+                <div class="news-desc">Get intelligent supplier recommendations based on your requirements and past
+                    orders.</div>
+                <div class="news-date">Dec 8, 2025</div>
+            </div>
+
+            <div class="news-card">
+                <span class="news-badge">UPDATE</span>
+                <div class="news-title">Quality Assurance Program</div>
+                <div class="news-desc">All shipments now verified by our certified agents before delivery.</div>
+                <div class="news-date">Dec 5, 2025</div>
+            </div>
+
+            <div class="news-card">
+                <span class="news-badge">ANNOUNCEMENT</span>
+                <div class="news-title">New Origins Added</div>
+                <div class="news-desc">Now sourcing premium cashews from Tanzania and Cote d'Ivoire.</div>
+                <div class="news-date">Dec 1, 2025</div>
+            </div>
+
+            <div class="news-card">
+                <span class="news-badge">PARTNERSHIP</span>
+                <div class="news-title">Primo Supplier Network</div>
+                <div class="news-desc">Access to top-rated suppliers with guaranteed quality and faster delivery.</div>
+                <div class="news-date">Nov 28, 2025</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
